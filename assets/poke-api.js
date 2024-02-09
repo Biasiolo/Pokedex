@@ -6,6 +6,11 @@ function convertPokeApiDetailToPokemon(pokeDetail) {
     const pokemon = new Pokemon()
     pokemon.number = pokeDetail.id
     pokemon.name = pokeDetail.name
+    
+    // Acessar a primeira habilidade (ability) do array abilities
+    const abilities = pokeDetail.abilities.slice(0, 2).map((abilitySlot) => abilitySlot.ability.name);
+
+    pokemon.abilities = abilities;
 
     const types = pokeDetail.types.map((typeSlot) => typeSlot.type.name)
     const [type] = types
@@ -14,6 +19,7 @@ function convertPokeApiDetailToPokemon(pokeDetail) {
     pokemon.type = type
 
     pokemon.photo = pokeDetail.sprites.other.dream_world.front_default
+    
 
     return pokemon
 }
