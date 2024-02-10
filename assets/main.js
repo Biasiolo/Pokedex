@@ -7,7 +7,7 @@ let offset = 0;
 
 function convertPokemonToLi(pokemon) {
     return `
-        <li class="pokemon ${pokemon.type}">
+        <li class="pokemon ${pokemon.type}" onclick="viewDetails(${pokemon.number})">
             <span class="number">#${pokemon.number}</span>
             <span class="name">${pokemon.name}</span>
 
@@ -16,16 +16,16 @@ function convertPokemonToLi(pokemon) {
                     ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
                 </ol>
 
-                <img src="${pokemon.photo}"
-                        alt="${pokemon.name}">
-                    <div class="detail">
+                <img src="${pokemon.photo}" alt="${pokemon.name}">
+
+                <div class="detail">
                     <ol class="moves"><span class="abili">Abilities</span>
-                    ${pokemon.abilities.map((ability) => `<li class="move ${ability}">${ability}</li>`).join('')}
+                        ${pokemon.abilities.map((ability) => `<li class="move ${ability}">${ability}</li>`).join('')}
                     </ol>
-                    </div>
+                </div>
             </div>
         </li>
-    `
+    `;
 }
 
 function loadPokemonItens(offset, limit) {
@@ -50,3 +50,20 @@ loadMoreButton.addEventListener('click', () => {
         loadPokemonItens(offset, limit)
     }
 })
+
+
+let viewDetails = (idPoke) =>{
+    const modalPoke = document.querySelector('.modalPoke')
+    if(modalPoke){ // Se existir o modal, ele ira tirar quando o usuario clicar no botao novamente
+        modalPoke.remove()
+    }
+
+    fetch(`https://pokeapi.co/api/v2/pokemon/${idPoke}`)
+        .then((response) => response.json())
+        .then((responseJson) => pokeApi.convertDetails(responseJson))
+        .then((convertPokemon) => {
+            const bodyDoc = document.querySelector('body')
+            bodyDoc.innerHTML += pokeApi.viewDetails(convertPokemon)
+        })
+
+}
